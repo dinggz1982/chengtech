@@ -34,6 +34,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
         .and()  
         .formLogin()  
         .loginPage("/login")//指定登录页是”/login”  
+       // .failureHandler(authenticationFailureHandler())
         .permitAll()  
         .successHandler(loginSuccessHandler()) //登录成功后可使用loginSuccessHandler()存储用户信息，可选。  
         .and()  
@@ -74,5 +75,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     @Bean  
     public AuthenticationSuccessHandler loginSuccessHandler(){  
         return new LoginSuccessHandler();  
+    }  
+    
+    @Bean  
+    public CtAuthenticationFailureHandler authenticationFailureHandler(){  
+        return new CtAuthenticationFailureHandler();  
     }  
 }    

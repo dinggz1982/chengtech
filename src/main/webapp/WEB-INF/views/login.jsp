@@ -57,6 +57,11 @@
 							value="&nbsp;取&nbsp;&nbsp;&nbsp;&nbsp;消&nbsp;">
 					</div>
 				</div>
+					<div class="row cl">
+					<div class="formControls col-xs-8 col-xs-offset-3">
+					<span style="color: red">${message }</span>	
+					</div>
+				</div>
 			</form>
 		</div>
 	</div>

@@ -105,7 +105,12 @@ public class BaseDAOImpl<T, ID extends Serializable> implements BaseDAO<T, ID> {
 		Query query = entityManager.createQuery(sql);
 		query.setParameter(1, o);
 		entityManager.close();
-		return (T) query.getSingleResult();
+		try{
+			return (T) query.getSingleResult();
+		}catch(Exception exception){
+			return null;
+		}
+		
 	}
 
 	@Override

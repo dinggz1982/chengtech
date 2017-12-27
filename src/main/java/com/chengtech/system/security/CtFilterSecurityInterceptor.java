@@ -14,14 +14,13 @@ import org.springframework.security.access.SecurityMetadataSource;
 import org.springframework.security.access.intercept.AbstractSecurityInterceptor;
 import org.springframework.security.access.intercept.InterceptorStatusToken;
 import org.springframework.security.web.FilterInvocation;
-import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CtFilterSecurityInterceptor extends AbstractSecurityInterceptor implements Filter {
 
 	@Autowired
-	private FilterInvocationSecurityMetadataSource securityMetadataSource;
+	private CtSecurityMetadataSource securityMetadataSource;
 
 	@Autowired
 	public void setAccessDecisionManager(CtAccessDecisionManager ctAccessDecisionManager) {
