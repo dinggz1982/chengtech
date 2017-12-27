@@ -47,9 +47,9 @@ public class BaseDAOImpl<T, ID extends Serializable> implements BaseDAO<T, ID> {
 			this.className = this.clz.getName();
 		}
 	}
-
-	@Transactional
+	
 	@Override
+	@Transactional
 	public boolean save(T entity) {
 		boolean flag = false;
 		try {
@@ -57,7 +57,6 @@ public class BaseDAOImpl<T, ID extends Serializable> implements BaseDAO<T, ID> {
 			flag = true;
 		} catch (Exception e) {
 			logger.error("保存" + clz.getName() + "出错:" + e);
-			;
 			throw e;
 		}
 		return flag;
