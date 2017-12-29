@@ -65,5 +65,31 @@ public class ChengtechApplicationTests {
 		
 		userService.save(user);
 	}
+	
+	@Test
+	@Rollback(false) 
+	public void addGeneralUser() {
+	//	System.out.println(this.userService.findById(1l).getEmail());
+
+	
+
+		Role role2 = new Role();
+		role2.setId(2l);
+
+
+
+		User user = new User();
+		BCryptPasswordEncoder bc = new BCryptPasswordEncoder(4);
+		user.setPassword(bc.encode("123456"));
+		user.setUsername("abc");
+		user.setEmail("abc@163.com");
+		user.setNickName("abc");
+		user.setSex("男");
+		Set<Role>  roles = new HashSet<Role>();
+		roles.add(role2);
+		user.setRoles(roles);
+		
+		userService.save(user);
+	}
 
 }
