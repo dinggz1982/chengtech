@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CtAccessDecisionManager implements AccessDecisionManager {
 
+	
 	public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes)
 			throws AccessDeniedException, InsufficientAuthenticationException {
 		if (configAttributes == null) {
@@ -23,13 +24,11 @@ public class CtAccessDecisionManager implements AccessDecisionManager {
 		Iterator<ConfigAttribute> ite = configAttributes.iterator();
 		while (ite.hasNext()) {
 			ConfigAttribute ca = ite.next();
-			String needRole = ((SecurityConfig) ca).getAttribute();
+			String protectedUrl = ((SecurityConfig) ca).getAttribute();
 			System.out.println("authentication size" + authentication.getAuthorities().size());
 			// ga 为用户所被赋予的权限。 needRole 为访问相应的资源应该具有的权限。
 			for (GrantedAuthority ga : authentication.getAuthorities()) {
-
-				if (needRole.trim().equals(ga.getAuthority().trim())) {
-
+				if (protectedUrl.trim().equals(ga.getAuthority().trim())) {
 					return;
 				}
 			}

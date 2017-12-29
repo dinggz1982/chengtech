@@ -30,5 +30,19 @@ public class UserController {
 		pageJson.setPage(pageIndex);
 		return pageJson;
 	}
+	
+	@GetMapping("/user/userList1")
+	@ResponseBody
+	public TableSplitResult<User> userList1(Integer pageIndex,Integer pageSize){
+		pageIndex = pageIndex == null ? 1 : pageIndex < 1 ? 1 : pageIndex;
+		pageSize = 10;
+		
+		PageData<User> pageData = this.userService.getPageData(pageIndex, pageSize, null);
+		TableSplitResult<User> pageJson = new TableSplitResult<User>();
+		pageJson.setTotal(pageData.getTotalCount());
+		pageJson.setRows(pageData.getPageData());
+		pageJson.setPage(pageIndex);
+		return pageJson;
+	}
 
 }
