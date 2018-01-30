@@ -213,5 +213,21 @@ public interface BaseDAO<T,ID extends Serializable> {
 	public List<T> queryPageList(final String hql,
 			final Map<String, Object> params, final int start, final int maxSize);
 	
+	 /**
+     * 根据原生sql获得结果集
+     * 
+     * @param sql
+     *            SQL语句
+     * @return 结果集
+     */
+    public List<Object> findObjectBySql(String sql);
+    
+    /**
+     * 根据原生sql获得结果集
+     * @param sql
+     * SQL语句
+     * @return 结果集
+     */
+    public List<Object[]> findBySql(String sql);
 	
 }

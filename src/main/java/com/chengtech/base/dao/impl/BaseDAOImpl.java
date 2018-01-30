@@ -101,7 +101,6 @@ public class BaseDAOImpl<T, ID extends Serializable> implements BaseDAO<T, ID> {
 	@Override
 	public T findOneBySql(String filed, Object o) {
 		String sql = "from " + className + " u WHERE u." + filed + "=?";
-		System.out.println(sql + "--------sql语句-------------");
 		Query query = entityManager.createQuery(sql);
 		query.setParameter(1, o);
 		entityManager.close();
@@ -116,7 +115,6 @@ public class BaseDAOImpl<T, ID extends Serializable> implements BaseDAO<T, ID> {
 	@Override
 	public Object findObjiectBysql(String tablename, String filed, Object o) {
 		String sql = "from " + tablename + " u WHERE u." + filed + "=?";
-		System.out.println(sql + "--------sql语句-------------");
 		Query query = entityManager.createQuery(sql);
 		query.setParameter(1, o);
 
@@ -137,7 +135,6 @@ public class BaseDAOImpl<T, ID extends Serializable> implements BaseDAO<T, ID> {
 			filedlist.add(filed);
 		}
 		sql = sql.substring(0, sql.length() - 4);
-		System.out.println(sql + "--------sql语句-------------");
 		Query query = entityManager.createQuery(sql);
 		for (int i = 0; i < filedlist.size(); i++) {
 			query.setParameter(i + 1, map.get(filedlist.get(i)));
@@ -181,7 +178,6 @@ public class BaseDAOImpl<T, ID extends Serializable> implements BaseDAO<T, ID> {
 			filedlist.add(filed);
 		}
 		sql = sql.substring(0, sql.length() - 4);
-		System.out.println(sql + "--------sql语句-------------");
 		Query query = entityManager.createQuery(sql);
 		for (int i = 0; i < filedlist.size(); i++) {
 			query.setParameter(i + 1, map.get(filedlist.get(i)));
@@ -220,7 +216,6 @@ public class BaseDAOImpl<T, ID extends Serializable> implements BaseDAO<T, ID> {
 	@Override
 	public List<T> findpages(String tablename, String filed, Object o, int start, int pageNumer) {
 		String sql = "from " + tablename + " u WHERE u." + filed + "=?";
-		System.out.println(sql + "--------page--sql语句-------------");
 		List<T> list = new ArrayList<>();
 		try {
 			Query query = entityManager.createQuery(sql);
@@ -394,6 +389,18 @@ public class BaseDAOImpl<T, ID extends Serializable> implements BaseDAO<T, ID> {
 			e.printStackTrace();
 		}
 		return list;
+	}
+
+	@Override
+	public List<Object> findObjectBySql(String sql) {
+		Query query = entityManager.createNativeQuery(sql);
+		return query.getResultList();
+	}
+
+	@Override
+	public List<Object[]> findBySql(String sql) {
+		Query query = entityManager.createNativeQuery(sql);
+		return query.getResultList();
 	}
 
 }

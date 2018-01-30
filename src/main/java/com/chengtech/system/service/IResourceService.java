@@ -43,5 +43,17 @@ public interface IResourceService extends BaseService<Resource, Long>{
 	 */
 	public Set<Resource> getResourcesByUserId(User user);
 	
+	/**
+	 * 根据用户获取权限菜单
+	 * <p>方法名:getMenuByUser </p>
+	 * <p>Description : </p>
+	 * <p>Company : </p>
+	 * @author 丁国柱
+	 * @date 2018年1月30日 下午10:19:48
+	 * @param user
+	 * @return
+	 */
+	public Set<Resource> getMenuByUser(User user);
+	
 
 }

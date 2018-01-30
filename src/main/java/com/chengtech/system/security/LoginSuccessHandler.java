@@ -7,25 +7,29 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
+
+import com.chengtech.system.service.IUserService;
 
 public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
 	@Resource
 	private HttpSession session;
+	
+	@Resource
+	private IUserService userService;
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
 
 		// 获得授权后可得到用户信息 可使用SUserService进行数据库操作
-		Object user =  authentication.getPrincipal();
-		session.setAttribute("user", user);
+		UserDetails user =  (UserDetails) authentication.getPrincipal();
+		
+		session.setAttribute("currentUser", this.userService.findByName(user.getUsername()));
 		/* Set<SysRole> roles = userDetails.getSysRoles(); */
-		// 输出登录提示信息
-		System.out.println("管理员 " + user+ " 登录");
-
-		System.out.println("IP :" + getIpAddress(request));
+		
 		// forward ： 可以隐藏url
 		// request.getRequestDispatcher("/admin").forward(request, response);
 		// 可以针对不同的用户跳转到不同的页面
