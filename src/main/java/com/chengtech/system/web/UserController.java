@@ -1,6 +1,10 @@
 package com.chengtech.system.web;
-import javax.annotation.Resource;
+import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +13,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.chengtech.base.model.PageData;
 import com.chengtech.base.model.TableSplitResult;
+import com.chengtech.system.entity.Resource;
+import com.chengtech.system.entity.ResourceButton;
 import com.chengtech.system.entity.User;
+import com.chengtech.system.service.IResourceButtonService;
+import com.chengtech.system.service.IResourceService;
 import com.chengtech.system.service.IUserService;
 
 
@@ -17,8 +25,20 @@ import com.chengtech.system.service.IUserService;
 @RequestMapping("/user")
 public class UserController {
 	
-	@Resource
+	@Autowired
 	private IUserService userService;
+	@Autowired
+	private IResourceButtonService resourceButtonService;
+	@Autowired
+	private IResourceService resourceService;
+	
+	@Autowired
+	private HttpSession session;
+	
+	@Autowired
+	private HttpServletRequest request;
+	
+	
 	
 	/**
 	 * 用户列表
@@ -42,6 +62,16 @@ public class UserController {
 		model.addAttribute("pages", pageData.getTotalPage());
 		model.addAttribute("pagesize", pageData.getPageSize());
 		model.addAttribute("pageIndex", pageIndex);
+		
+		//取得用户的按钮权限
+		User currentUser=  (User) session.getAttribute("currentUser");
+		
+		System.out.println(request.getRequestURI());
+		String url = request.getRequestURI();
+		Resource resource = resourceService.getResourceByURL(url);
+		Set<ResourceButton>  buttons = this.resourceButtonService.getResourceButtonByUserId(resource, currentUser);
+		model.addAttribute("buttons", buttons);
+		
 		return "system/user/list";
 	}
 	

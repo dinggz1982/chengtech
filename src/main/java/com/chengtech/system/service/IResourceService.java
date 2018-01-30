@@ -66,4 +66,16 @@ public interface IResourceService extends BaseService<Resource, Long>{
 	 * @return
 	 */
 	public String getResourceTree(Integer roleId);
+	
+	/**
+	 * 通过url获取资源
+	 * <p>方法名:getResourceByURL </p>
+	 * <p>Description : </p>
+	 * <p>Company : </p>
+	 * @author 丁国柱
+	 * @date 2018年1月31日 上午2:01:00
+	 * @param url
+	 * @return
+	 */
+	public Resource getResourceByURL(String url);
 }

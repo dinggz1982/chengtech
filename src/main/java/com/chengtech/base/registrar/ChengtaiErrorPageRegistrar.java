@@ -22,8 +22,11 @@ public class ChengtaiErrorPageRegistrar implements ErrorPageRegistrar {
         //具体的错误码错误异常页面
         ErrorPage e404 = new ErrorPage(HttpStatus.NOT_FOUND,"/404.html");
         ErrorPage e500 = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR,"/500.html");
+        ErrorPage e403 = new ErrorPage(HttpStatus.FORBIDDEN,"/403.html");
+        
         //指定具体异常的错误定制页面
         ErrorPage argspage = new ErrorPage(IllegalArgumentException.class,"/argsException.html");
-        registry.addErrorPages(e404,e500,argspage);
+        
+        registry.addErrorPages(e404,e500,e403,argspage);
     }
 }

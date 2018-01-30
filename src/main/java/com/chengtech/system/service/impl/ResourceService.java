@@ -109,7 +109,7 @@ public class ResourceService extends BaseDAOImpl<Resource, Long> implements IRes
 					Object[] object = (Object[]) iterator.next();
 					bf.append("{id:\"" + object[0] + "\",pId:\"" + object[1] + "\",name:\"" + object[2] + "\"");
 
-					int childNum = this.getCountBySql("select  count(*) from sys_resource where parentId=" + object[0]);
+					int childNum = this.getCountBySql("select count(*) from sys_resource where parentId=" + object[0]);
 					if (childNum > 0) {
 						// 有子树的情况
 						bf.append(",open:true");
@@ -132,19 +132,36 @@ public class ResourceService extends BaseDAOImpl<Resource, Long> implements IRes
 				for (Iterator iterator = objects.iterator(); iterator.hasNext();) {
 					Object[] object = (Object[]) iterator.next();
 					bf.append("{id:\"" + object[0] + "\",pId:\"" + object[1] + "\",name:\"" + object[2] + "\"");
-
 					int childNum = this.getCountBySql("select  count(*) from sys_resource where parentId=" + object[0]);
 					if (childNum > 0) {
 						// 有子树的情况
 						bf.append(",open:true");
 					}
 					bf.append("},");
+					
+					//判断当前资源中是否有对应的按钮操作
+					List<Object[]> buttonObjects = this.findBySql(
+							"select rb.id as id,rb.name as name from sys_resource_button rb where rb.resource_id=" +object[0] );
+					if(buttonObjects!=null&&buttonObjects.size()>0){
+						for (Iterator iterator2 = buttonObjects.iterator(); iterator2.hasNext();) {
+							Object[] objects2 = (Object[]) iterator2.next();
+							int buttonId = 10000+ Integer.parseInt(objects2[0].toString());
+							bf.append("{id:\"" + buttonId + "\",pId:\"" + object[0] + "\",name:\"" + objects2[1] + "\"},");
+						}
+					}
+					
 				}
 				return bf.deleteCharAt(bf.length() - 1).toString() + "]";
 			} else {
 				return "";
 			}
 		}
+	}
+
+	@Override
+	public Resource getResourceByURL(String url) {
+		// TODO Auto-generated method stub
+		return this.findOneBySql("url", url);
 	}
 
 }

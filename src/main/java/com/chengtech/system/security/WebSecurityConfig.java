@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
@@ -21,7 +23,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 
 	@Resource
 	private CtUserDetailsService userDetailsService;  
-    //http://localhost:8080/login 输入正确的用户名密码 并且选中remember-me 则登陆成功，转到 index页面   
+
+	//http://localhost:8080/login 输入正确的用户名密码 并且选中remember-me 则登陆成功，转到 index页面   
     //再次访问index页面无需登录直接访问  
     //访问http://localhost:8080/home 不拦截，直接访问，  
     //访问http://localhost:8080/hello 需要登录验证后，且具备 “ADMIN”权限hasAuthority("ADMIN")才可以访问  
@@ -38,6 +41,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
        // .failureHandler(authenticationFailureHandler())
         .permitAll()  
         .successHandler(loginSuccessHandler()) //登录成功后可使用loginSuccessHandler()存储用户信息，可选。  
+        .and()
+        .sessionManagement().maximumSessions(1).sessionRegistry(sessionRegistry()).expiredUrl("/login")
+        .and()
         .and()  
         .logout()  
         .logoutSuccessUrl("/index") //退出登录后的默认网址是”/home”  
@@ -82,4 +88,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     public CtAuthenticationFailureHandler authenticationFailureHandler(){  
         return new CtAuthenticationFailureHandler();  
     }  
+    
+    @Bean    
+    public SessionRegistry sessionRegistry(){    
+        return new SessionRegistryImpl();    
+    }   
 }    

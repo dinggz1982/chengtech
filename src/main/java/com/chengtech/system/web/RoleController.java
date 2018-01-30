@@ -5,37 +5,30 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.chengtech.base.model.PageData;
 import com.chengtech.system.entity.Resource;
-import com.chengtech.system.service.IResourceService;
+import com.chengtech.system.entity.Role;
+import com.chengtech.system.service.IRoleService;
 
 @Controller
-@RequestMapping("/resource")
-public class ResourceController {
+@RequestMapping("/role")
+public class RoleController {
 	
 	@Autowired
-	private IResourceService resourceService;
+	private IRoleService roleService;
 
 	@GetMapping("/list")
 	public String list(Integer pageIndex,Integer pageSize,Model model){
 		pageIndex = pageIndex == null ? 1 : pageIndex < 1 ? 1 : pageIndex;
 		pageSize = 10;
-		PageData<Resource> pageData = this.resourceService.getPageData(pageIndex, pageSize, null);
+		PageData<Role> pageData = this.roleService.getPageData(pageIndex, pageSize, null);
 		model.addAttribute("dataList", pageData.getPageData());
 		model.addAttribute("total", pageData.getTotalCount());
 		model.addAttribute("pages", pageData.getTotalPage());
 		model.addAttribute("pagesize", pageData.getPageSize());
 		model.addAttribute("pageIndex", pageIndex);
-		return "system/resource/list";
+		return "system/role/list";
 	}
-	
-	@GetMapping("/tree")
-	@ResponseBody
-	public String tree(){
-		return this.resourceService.getResourceTree(null);
-	}
-	
 
 }

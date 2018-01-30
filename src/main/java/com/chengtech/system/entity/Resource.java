@@ -1,6 +1,7 @@
 package com.chengtech.system.entity;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+
+import org.hibernate.annotations.Formula;
 
 /**
  * 
@@ -28,6 +31,28 @@ import javax.persistence.Transient;
 @Entity
 @Table(name = "sys_resource")
 public class Resource {
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Resource other = (Resource) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", length = 10)
@@ -75,6 +100,29 @@ public class Resource {
 	@Column(name = "methodPath", length = 1000)
 	private String methodPath;// 资源所对应的包路径
 	
+	/**
+	 * 是否有叶子节点,@Formula 执行getter方法时执行语句
+	 */
+	@Formula(value = "(select count(*) from sys_resource sr where sr.parentId = id)")
+	private boolean hasChildren;
+	
+	/**
+	 * 判断该资源下是否有权限操作按钮
+	 */
+	@Formula(value = "(select count(*) from sys_resource_button srb where srb.resource_id = id)")
+	private boolean hasButton;
+	
+	@Transient
+	private Set<ResourceButton> operates;
+	
+	public Set<ResourceButton> getOperates() {
+		return operates;
+	}
+
+	public void setOperates(Set<ResourceButton> operates) {
+		this.operates = operates;
+	}
+
 	// 删除标示
 	@Column(columnDefinition = "bit(1) DEFAULT 0 comment '软删除标识'")
 	private boolean delFlag;
