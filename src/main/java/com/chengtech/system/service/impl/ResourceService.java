@@ -23,7 +23,6 @@ import com.chengtech.system.service.IResourceService;
  * <p>
  * Company :
  * </p>
- * 
  * @author 丁国柱
  * @date 2017年11月26日 上午1:55:55
  */
@@ -55,7 +54,7 @@ public class ResourceService extends BaseDAOImpl<Resource, Long> implements IRes
 			String ids = "";
 			for (Iterator iterator = roleList.iterator(); iterator.hasNext();) {
 				Role role = (Role) iterator.next();
-				String roleId = iterator.next().toString();
+				long roleId = role.getId();
 				ids += roleId + ",";
 			}
 			ids = ids.substring(0, ids.length() - 1);
