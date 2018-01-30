@@ -403,4 +403,10 @@ public class BaseDAOImpl<T, ID extends Serializable> implements BaseDAO<T, ID> {
 		return query.getResultList();
 	}
 
+	@Override
+	public int getCountBySql(String sql) {
+		Query query = entityManager.createNativeQuery(sql);
+		return Integer.parseInt(query.getSingleResult().toString());
+	}
+
 }

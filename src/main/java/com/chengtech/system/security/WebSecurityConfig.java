@@ -26,7 +26,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
     //访问http://localhost:8080/home 不拦截，直接访问，  
     //访问http://localhost:8080/hello 需要登录验证后，且具备 “ADMIN”权限hasAuthority("ADMIN")才可以访问  
     @Override  
-    protected void configure(HttpSecurity http) throws Exception {  
+    protected void configure(HttpSecurity http) throws Exception { 
+    	http.headers().frameOptions().disable();
         http  
         .authorizeRequests()  
         .antMatchers("/index","/","/content/**","/static/**").permitAll()//访问：/home 无需登录认证权限  

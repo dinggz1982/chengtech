@@ -229,5 +229,17 @@ public interface BaseDAO<T,ID extends Serializable> {
      * @return 结果集
      */
     public List<Object[]> findBySql(String sql);
+    
+    /**
+     * 根据sql获取count
+     * <p>方法名:getCountBySql </p>
+     * <p>Description : </p>
+     * <p>Company : </p>
+     * @author 丁国柱
+     * @date 2018年1月31日 上午12:00:02
+     * @param sql
+     * @return
+     */
+    public int getCountBySql(String sql);
 	
 }

@@ -23,6 +23,7 @@ import com.chengtech.system.service.IResourceService;
  * <p>
  * Company :
  * </p>
+ * 
  * @author 丁国柱
  * @date 2017年11月26日 上午1:55:55
  */
@@ -74,8 +75,8 @@ public class ResourceService extends BaseDAOImpl<Resource, Long> implements IRes
 				Set<Resource> children = new HashSet<Resource>();
 				List<Object[]> childrenModule = this.findBySql(
 						"select r.id,r.url,r.name from sys_resource r,sys_role_resources rr where rr.role_id in(" + ids
-								+ ") and  r.parentId='" + objects[0]
-								+ "' and rr.resources_id = r.id and r.isMenu =1 and r.delFlag=0 order by r.id  asc");
+								+ ") and  r.parentId=" + objects[0]
+								+ " and rr.resources_id = r.id and r.isMenu =1 and r.delFlag=0 order by r.id  asc");
 				for (Iterator iterator2 = childrenModule.iterator(); iterator2.hasNext();) {
 					Object[] objects2 = (Object[]) iterator2.next();
 					Resource resource1 = new Resource();
@@ -91,6 +92,59 @@ public class ResourceService extends BaseDAOImpl<Resource, Long> implements IRes
 			}
 		}
 		return resources;
+	}
+
+	@Override
+	public String getResourceTree(Integer roleId) {
+		if (roleId != null && roleId > 0) {
+			List<Object[]> objects = this.findBySql(
+					"select r.id as id,r.parentId as pId,r.name as name from sys_resource r,sys_role_resources rr where r.delFlag=0 and r.id= rr.resources_id and rr.role_id="
+							+ roleId);
+			// { id:1, pId:0, name:"父节点1 - 展开", open:true},
+
+			if (objects != null && objects.size() > 0) {
+				StringBuffer bf = new StringBuffer();
+				bf.append("[");
+				for (Iterator iterator = objects.iterator(); iterator.hasNext();) {
+					Object[] object = (Object[]) iterator.next();
+					bf.append("{id:\"" + object[0] + "\",pId:\"" + object[1] + "\",name:\"" + object[2] + "\"");
+
+					int childNum = this.getCountBySql("select  count(*) from sys_resource where parentId=" + object[0]);
+					if (childNum > 0) {
+						// 有子树的情况
+						bf.append(",open:true");
+					}
+					bf.append("},");
+				}
+				return bf.deleteCharAt(bf.length() - 1).toString() + "]";
+			} else {
+				return "";
+			}
+
+		} else {
+			List<Object[]> objects = this.findBySql(
+					"select r.id as id,r.parentId as pId,r.name as name from sys_resource r where r.delFlag=0");
+			// { id:1, pId:0, name:"父节点1 - 展开", open:true},
+
+			if (objects != null && objects.size() > 0) {
+				StringBuffer bf = new StringBuffer();
+				bf.append("[");
+				for (Iterator iterator = objects.iterator(); iterator.hasNext();) {
+					Object[] object = (Object[]) iterator.next();
+					bf.append("{id:\"" + object[0] + "\",pId:\"" + object[1] + "\",name:\"" + object[2] + "\"");
+
+					int childNum = this.getCountBySql("select  count(*) from sys_resource where parentId=" + object[0]);
+					if (childNum > 0) {
+						// 有子树的情况
+						bf.append(",open:true");
+					}
+					bf.append("},");
+				}
+				return bf.deleteCharAt(bf.length() - 1).toString() + "]";
+			} else {
+				return "";
+			}
+		}
 	}
 
 }

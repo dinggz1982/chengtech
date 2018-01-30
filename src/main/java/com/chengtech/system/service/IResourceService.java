@@ -55,5 +55,15 @@ public interface IResourceService extends BaseService<Resource, Long>{
 	 */
 	public Set<Resource> getMenuByUser(User user);
 	
-
+	/**
+	 * 根据角色返回资源信息
+	 * <p>方法名:getResourceTree </p>
+	 * <p>Description : </p>
+	 * <p>Company : </p>
+	 * @author 丁国柱
+	 * @date 2018年1月30日 下午11:56:20
+	 * @param roleId
+	 * @return
+	 */
+	public String getResourceTree(Integer roleId);
 }
